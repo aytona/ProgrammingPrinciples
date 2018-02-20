@@ -8,7 +8,7 @@ def initScreen(colour, maxAmp):
     it initializes the screen window and returns the screen object"""
     _wn = turtle.Screen()
     _wn.colormode(255)
-    _wn.setworldcoordinates(0, -maxAmp - 1, 370, maxAmp)
+    _wn.setworldcoordinates(0, -1 if -maxAmp > -1 else -maxAmp-1 , 370, 1 if maxAmp < 1 else maxAmp)
     while True:
         try:
             _wn.bgcolor(colour)
@@ -31,7 +31,13 @@ def harmonicsInput(num):
     it then returns an array of tuples containing these information"""
     _harmonics = []
     for i in range(num):
-        _harmonics.append((int(input('Amplitude of harmonic {}: '.format(i+1))), int(input('Frequency of harmonic {}: '.format(i+1)))))
+        while True:
+            try:
+                _harmonics.append((float(input('Amplitude of harmonic {}: '.format(i+1))), float(input('Frequency of harmonic {}: '.format(i+1)))))
+                break
+            except ValueError:
+                print('Values must be in decimal format(can be float)')
+            
     return _harmonics
 
 def getMaxAmp(harmonic):
