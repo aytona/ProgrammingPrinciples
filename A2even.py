@@ -59,23 +59,36 @@ def initTurtleList(num, colourList):
     and the list of colours
     It initializes the list of turtles used to draw each harmonic"""
     _turtleList = []
+    for i in range(len(colourList)):
+        _turtleList.append(createTurtle(colourList[i]))
     for i in range(num):
         generateColour(colourList)
         _turtleList.append(createTurtle(colourList[-1]))
 
     return _turtleList
 
+def drawSineWaves(turtles, harmonic):
+    """This function takes in the list of turtle objects and draw the sine waves"""
+    fundamental = threading.Thread(target=drawHarmonics, args=(turtles[1], (1,1)))
+    fundamental.start()
+    for i in range(len(harmonic)):
+        _newHarmonic = threading.Thread(target=drawHarmonics, args=(turtles[i+2], harmonic[i]))
+        _newHarmonic.start()
+
+def drawHarmonics(turt, harmonic):
+    """This function takes in the turtle object, and the harmonic inputs
+    to draw each individual harmonic"""
+    for x in range(361):
+        turt.goto(x, harmonic[0] * math.sin(math.radians(x * harmonic[1])))
+
 def main():
-    random.seed(1000)
     screenColour = input('Screen colour: ')
     numOfHarmonics = int(input('Number of harmonics: '))
     turtleColours = [(0,0,0),(255,0,0)]
-    #harmonics = harmonicsInput(numOfHarmonics)
-    wn = initScreen(screenColour, 100)
+    harmonics = harmonicsInput(numOfHarmonics)
+    wn = initScreen(screenColour, getMaxAmp(harmonics))
     turtleList = initTurtleList(numOfHarmonics, turtleColours)
-    turtleColours.sort()
-    for r,g,b in turtleColours:
-        print (r,g,b)
+    drawSineWaves(turtleList, harmonics)
     wn.exitonclick()
 
 main()
