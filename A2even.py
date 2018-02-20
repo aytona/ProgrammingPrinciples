@@ -26,10 +26,6 @@ def createTurtle(colour):
     _turtle.color(colour)
     return _turtle
 
-def randomColour():
-    """This function returns a random RGB colour tuple"""
-    return (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
-
 def harmonicsInput(num):
     """This function iterates through each harmonic to get its amplitude and frequency,
     it then returns an array of tuples containing these information"""
@@ -43,21 +39,20 @@ def getMaxAmp(harmonic):
     and returns the highest value amplitude"""
     return max([x[0] for x in harmonic])
 
-def checkColour(randColour, turtColours):
-    """This function takes in the colour that needs to be checked,
-    and the list of all current colours
-    if it matches to another colour already generated, it creates a new colour
-    if it doesn't then return the new turtle colour list with the new colour"""
-    for r,g,b in turtColours:
-        print(randColour)
-        print(randColour[0])
-        print(r)
-        if turtColours[r] == randColour[0] and turtColours[g] == randColour[1] and turtColours[b] == randColour[2]:
-            print('Same colour!')
-            checkColour(randcomColour(), turtColours)
-        else:
-            turtColours.append(randColour)
-            break;
+def generateColour(turtColours):
+    """This function takes in the list of already used colours,
+    and generates a random colour that hasn't been used yet"""
+    while True:
+        try:
+            _newColour = (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
+            if _newColour in turtColours:
+                raise Exception
+            else:
+                turtColours.append(_newColour)
+                break
+        except Exception:
+            print('This colour is already used')
+            pass
 
 def initTurtleList(num, colourList):
     """This function takes in the number of harmonics,
@@ -65,8 +60,7 @@ def initTurtleList(num, colourList):
     It initializes the list of turtles used to draw each harmonic"""
     _turtleList = []
     for i in range(num):
-        _colour = randomColour()
-        checkColour(_colour, colourList)
+        generateColour(colourList)
         _turtleList.append(createTurtle(colourList[-1]))
 
     return _turtleList
@@ -75,13 +69,13 @@ def main():
     random.seed(1000)
     screenColour = input('Screen colour: ')
     numOfHarmonics = int(input('Number of harmonics: '))
-    turtleColours = [(0,0,0),(255,0,0),(42,136,250)]
+    turtleColours = [(0,0,0),(255,0,0)]
     #harmonics = harmonicsInput(numOfHarmonics)
     wn = initScreen(screenColour, 100)
     turtleList = initTurtleList(numOfHarmonics, turtleColours)
     turtleColours.sort()
     for r,g,b in turtleColours:
         print (r,g,b)
-    #wn.exitonclick()
+    wn.exitonclick()
 
 main()
