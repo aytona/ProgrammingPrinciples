@@ -1,14 +1,14 @@
 # Christopher Aytona
 # Programming Principles: Assignment 2 - Even
 # This program draw x amount of harmonics and add them together
-import turtle, math, random, threading
+import turtle, math, random
 
 def initScreen(colour, maxAmp):
     """This function takes in a string for colour and int for maxAmp,
     it initializes the screen window and returns the screen object"""
     _wn = turtle.Screen()
     _wn.colormode(255)
-    _wn.setworldcoordinates(0, -1 if -maxAmp > -1 else -maxAmp-1 , 370, 1 if maxAmp < 1 else maxAmp)
+    _wn.setworldcoordinates(0, -maxAmp , 370, maxAmp)
     while True:
         try:
             _wn.bgcolor(colour)
@@ -75,11 +75,9 @@ def initTurtleList(num, colourList):
 
 def drawSineWaves(turtles, harmonic):
     """This function takes in the list of turtle objects and draw the sine waves"""
-    fundamental = threading.Thread(target=drawHarmonics, args=(turtles[1], (1,1)))
-    fundamental.start()
     for i in range(len(harmonic)):
-        _newHarmonic = threading.Thread(target=drawHarmonics, args=(turtles[i+2], harmonic[i]))
-        _newHarmonic.start()
+        drawHarmonics(turtles[i+1], harmonic[i])
+    sumHarmonic(turtles[0], harmonic)
 
 def drawHarmonics(turt, harmonic):
     """This function takes in the turtle object, and the harmonic inputs
@@ -87,10 +85,22 @@ def drawHarmonics(turt, harmonic):
     for x in range(361):
         turt.goto(x, harmonic[0] * math.sin(math.radians(x * harmonic[1])))
 
+def sumHarmonic(turt, harmonic):
+    """This function is similar to drawHarmonics but instead of taking in a tuple,
+    it will take in a list of tuples which is the list of amps and freqs inputs"""
+    _amps = [amp[0] for amp in harmonic]
+    _freqs = [freq[1] for freq in harmonic]
+    turt.pensize(2)
+    for x in range(361):
+        y = 0
+        for i in range(len(harmonic)):
+            y += _amps[i] * math.sin(math.radians(x * _freqs[i]))
+        turt.goto(x, y)
+
 def main():
     screenColour = input('Screen colour: ')
     numOfHarmonics = int(input('Number of harmonics: '))
-    turtleColours = [(0,0,0),(255,0,0)]
+    turtleColours = [(0,0,0)]
     harmonics = harmonicsInput(numOfHarmonics)
     wn = initScreen(screenColour, getMaxAmp(harmonics))
     turtleList = initTurtleList(numOfHarmonics, turtleColours)
