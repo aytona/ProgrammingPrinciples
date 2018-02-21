@@ -97,14 +97,54 @@ def sumHarmonic(turt, harmonic):
             y += _amps[i] * math.sin(math.radians(x * _freqs[i]))
         turt.goto(x, y)
 
-def main():
-    screenColour = input('Screen colour: ')
+def sineDoubleFreq(amount):
+    """This function creates a list of tuples that contains a specified amount of harmonics
+    each harmonic's frequency is doubled, while its amplitude remains constant.
+    It then returns the list of all harmonic tuples"""
+    harmonics = []
+    for i in range(amount):
+        harmonics.append((100.0/(i+1.0)*2.0, (i + 1.0) * 2.0))
+
+    return harmonics
+
+def assignmentEven(sColour, tColours):
+    """This function executes part 1 of assignment 2"""
+    _harmonics = [(1.0, 1.0), (1/3, 3.0), (1/5, 5.0)]
+    wn = initScreen(sColour, getMaxAmp(_harmonics))
+    turtleList = initTurtleList(len(_harmonics), tColours)
+    drawSineWaves(turtleList, _harmonics)
+    return wn
+
+def assignmentOdd(sColour, tColours):
+    """This function executes part 2 of assignment 2"""    
+    waveAmount = int(input('Amount of sine waves: '))
+    _harmonics = sineDoubleFreq(waveAmount)
+    wn = initScreen(sColour, getMaxAmp(_harmonics) * 2)
+    turtleList = initTurtleList(len(_harmonics), tColours)
+    drawSineWaves(turtleList, _harmonics)
+    return wn
+
+def userHarmonics(sColour, tColours):
+    """This function executes the program according to user inputs"""
     numOfHarmonics = int(input('Number of harmonics: '))
+    _harmonics = harmonicsInput(numOfHarmonics)
+    wn = initScreen(sColour, getMaxAmp(_harmonics))
+    turtleList = initTurtleList(numOfHarmonics, tColours)
+    drawSineWaves(turtleList, _harmonics)
+    return wn
+
+def main():
+    programType = input('Welcome!\nType "even" for part 1 or "odd" for part 2.\nAny other input will let users add and define as much harmonics as they want.\nInput: ')
+    programType.lower()
+    screenColour = input('Screen colour: ')
+    wn = None
     turtleColours = [(0,0,0)]
-    harmonics = harmonicsInput(numOfHarmonics)
-    wn = initScreen(screenColour, getMaxAmp(harmonics))
-    turtleList = initTurtleList(numOfHarmonics, turtleColours)
-    drawSineWaves(turtleList, harmonics)
+    if programType == "even":
+        wn = assignmentEven(screenColour, turtleColours)
+    elif programType == "odd":
+        wn = assignmentOdd(screenColour, turtleColours)
+    else:
+        wn = userHarmonics(screenColour, turtleColours)
     wn.exitonclick()
 
 main()
