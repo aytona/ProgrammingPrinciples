@@ -1,6 +1,7 @@
 # Christopher Aytona
-# Programming Principles: Assignment 2 - Even
-# This program draw x amount of harmonics and add them together
+# Programming Principles: Assignment 2
+# This program does both Part 1 and Part 2 of the assignment
+# It also has the option to let the user define as much harmonics as they want and it will output the sum
 import turtle, math, random, threading
 
 def initScreen(colour, maxAmp):
