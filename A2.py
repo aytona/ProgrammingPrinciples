@@ -9,7 +9,7 @@ def initScreen(colour, maxAmp):
     it initializes the screen window and returns the screen object"""
     _wn = turtle.Screen()
     _wn.colormode(255)
-    _wn.setworldcoordinates(0, -maxAmp - 1 , 370, maxAmp)
+    _wn.setworldcoordinates(0, -maxAmp - (maxAmp/10) , 370, maxAmp)
     while True:
         try:
             _wn.bgcolor(colour)
