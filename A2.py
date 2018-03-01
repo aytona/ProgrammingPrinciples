@@ -2,7 +2,7 @@
 # Programming Principles: Assignment 2
 # This program does both Part 1 and Part 2 of the assignment
 # It also has the option to let the user define as much harmonics as they want and it will output the sum
-import turtle, math, random, threading
+import turtle, math, random, threading, platform
 
 def initScreen(colour, maxAmp):
     """This function takes in a string for colour and int for maxAmp,
@@ -82,11 +82,17 @@ def initTurtleList(num, colourList):
 def drawSineWaves(turtles, harmonic):
     """This function takes in the list of turtle objects and draw the sine waves"""
     try:
-        for i in range(len(harmonic)):
-            _newThread = threading.Thread(target=drawHarmonics, args=(turtles[i+1], harmonic[i]))
-            _newThread.start()
-        _sumThread = threading.Thread(target=sumHarmonic, args=(turtles[0], harmonic))
-        _sumThread.start()
+        """NOTE: I have only tested multithreading between Windows and MacOSX
+        during my debugging process, I found that the MacOSX had trouble multithreading
+        while my Windows workstation had no problem with it"""
+        if platform.system() == "Windows":
+            for i in range(len(harmonic)):
+                _newThread = threading.Thread(target=drawHarmonics, args=(turtles[i+1], harmonic[i]))
+                _newThread.start()
+            _sumThread = threading.Thread(target=sumHarmonic, args=(turtles[0], harmonic))
+            _sumThread.start()
+        else:
+            raise Exception
     except Exception:
         pass
         print('Could not multithread')
