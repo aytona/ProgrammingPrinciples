@@ -160,7 +160,7 @@ def writeFormulas(harmonics, tColours, maxAmp):
         _turt.color(tColours[i])
         _turt.penup()
         _turt.goto(375, maxAmp-_textBuffer-(_textBuffer*i))
-        _turt.write('y={:.2f}sin({:.2f}f)'.format(_amps[i], _freqs[i]), align='left', font=('Arial', 14, 'normal'))
+        _turt.write('y={:g}sin({:g}f)'.format(round(_amps[i],3),round(_freqs[i],3)), align='left', font=('Arial', 14, 'normal'))
 
 
 def main():
