@@ -2,14 +2,14 @@
 # Programming Principles: Assignment 2
 # This program does both Part 1 and Part 2 of the assignment
 # It also has the option to let the user define as much harmonics as they want and it will output the sum
-import turtle, math, random, threading, platform
+import turtle, math, random
 
 def initScreen(colour, maxAmp):
     """This function takes in a string for colour and int for maxAmp,
     it initializes the screen window and returns the screen object"""
     _wn = turtle.Screen()
     _wn.colormode(255)
-    _wn.setworldcoordinates(0, -maxAmp - (maxAmp/10) , 370, maxAmp)
+    _wn.setworldcoordinates(0, -maxAmp - (maxAmp/10) , 550, maxAmp)
     while True:
         try:
             _wn.bgcolor(colour)
@@ -81,24 +81,9 @@ def initTurtleList(num, colourList):
 
 def drawSineWaves(turtles, harmonic):
     """This function takes in the list of turtle objects and draw the sine waves"""
-    try:
-        """NOTE: I have only tested multithreading between Windows and MacOSX
-        during my debugging process, I found that the MacOSX had trouble multithreading
-        while my Windows workstation had no problem with it"""
-        if platform.system() == "Windows":
-            for i in range(len(harmonic)):
-                _newThread = threading.Thread(target=drawHarmonics, args=(turtles[i+1], harmonic[i]))
-                _newThread.start()
-            _sumThread = threading.Thread(target=sumHarmonic, args=(turtles[0], harmonic))
-            _sumThread.start()
-        else:
-            raise Exception
-    except Exception:
-        pass
-        print('Could not multithread')
-        for i in range(len(harmonic)):
-            drawHarmonics(turtles[i+1], harmonic[i])
-        sumHarmonic(turtles[0], harmonic)
+    for i in range(len(harmonic)):
+        drawHarmonics(turtles[i+1], harmonic[i])
+    sumHarmonic(turtles[0], harmonic)
         
 def drawHarmonics(turt, harmonic):
     """This function takes in the turtle object, and the harmonic inputs
@@ -130,29 +115,53 @@ def sineDoubleFreq(amount):
 
 def assignmentEven(sColour, tColours):
     """This function executes part 1 of assignment 2"""
-    _harmonics = [(1.0, 1.0), (1/3, 3.0), (1/5, 5.0)]
-    _wn = initScreen(sColour, totalAmp(_harmonics))
+    _firstAmp = 1/3
+    _secondAmp = 1/5
+    _harmonics = [(1.0, 1.0), (_firstAmp, 3.0), (_secondAmp, 5.0)]
+    _totalAmp = totalAmp(_harmonics)
+    _wn = initScreen(sColour, _totalAmp)
     _turtleList = initTurtleList(len(_harmonics), tColours)
     drawSineWaves(_turtleList, _harmonics)
+    writeFormulas(_harmonics, tColours, _totalAmp)
     return _wn
 
 def assignmentOdd(sColour, tColours):
     """This function executes part 2 of assignment 2"""    
     _waveAmount = int(input('Amount of sine waves: '))
     _harmonics = sineDoubleFreq(_waveAmount)
-    _wn = initScreen(sColour, totalAmp(_harmonics))
+    _totalAmp = totalAmp(_harmonics)
+    _wn = initScreen(sColour, _totalAmp)
     _turtleList = initTurtleList(len(_harmonics), tColours)
     drawSineWaves(_turtleList, _harmonics)
+    writeFormulas(_harmonics, tColours, _totalAmp)
     return _wn
 
 def userHarmonics(sColour, tColours):
     """This function executes the program according to user inputs"""
     _numOfHarmonics = int(input('Number of harmonics: '))
     _harmonics = harmonicsInput(_numOfHarmonics)
-    _wn = initScreen(sColour, totalAmp(_harmonics))
+    _totalAmp = totalAmp(_harmonics)
+    _wn = initScreen(sColour, _totalAmp)
     _turtleList = initTurtleList(_numOfHarmonics, tColours)
     drawSineWaves(_turtleList, _harmonics)
+    writeFormulas(_harmonics, tColours, _totalAmp)
     return _wn
+
+def writeFormulas(harmonics, tColours, maxAmp):
+    """This function writes out the formulas of each wave"""
+    _amps = [amp[0] for amp in harmonics]
+    _freqs = [freq[1] for freq in harmonics]
+    _amps.insert(0, sum(_amps))
+    _freqs.insert(0, sum(_freqs))
+    _textBuffer = maxAmp/len(tColours)
+    for i in range(len(tColours)):
+        _turt = turtle.Turtle()
+        _turt.hideturtle()
+        _turt.color(tColours[i])
+        _turt.penup()
+        _turt.goto(375, maxAmp-_textBuffer-(_textBuffer*i))
+        _turt.write('y={:.2f}sin({:.2f}f)'.format(_amps[i], _freqs[i]), align='left', font=('Arial', 14, 'normal'))
+
 
 def main():
     programType = input('Welcome!\nType "even" for part 1 or "odd" for part 2.\nAny other input will let users add and define as much harmonics as they want.\nInput: ').lower()
