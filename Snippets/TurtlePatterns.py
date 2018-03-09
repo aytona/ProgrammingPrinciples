@@ -1,16 +1,8 @@
 # This program draws patterns using Turtle
 import turtle
 
-def makeScreen(n_colour):
-    while True:
-        try:
-            m_wn = turtle.Screen()
-            m_wn.bgcolor(n_colour)
-            break
-        except:
-            pass
-            print('Invalid colour!')
-            n_colour = input('New colour: ')
+def makeScreen():
+    m_wn = turtle.Screen()
     return m_wn
 
 def makeTurtle(n_colour, n_shape='turtle', n_size=1, n_initPos=(0,0)):
@@ -46,7 +38,7 @@ def spiralSticksPattern(turt):
     turt.end_fill()
 
 def main():
-    wn = makeScreen(input('Screen colour: '))
+    wn = makeScreen()
     flowerTurt = makeTurtle('blue', n_initPos=(-250, 250))
     flowerPattern(flowerTurt)
     spiralTurt = makeTurtle('red', n_initPos=(250, 250))
