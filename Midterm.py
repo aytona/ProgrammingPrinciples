@@ -4,9 +4,9 @@ import turtle, random
 
 def makeScreen(screen_colour):
     """This function creates the window using a string param for colour"""
-    _wn = turtle.Screen()
-    _wn.bgcolor(screen_colour)
-    return _wn
+    window_screen = turtle.Screen()
+    window_screen.bgcolor(screen_colour)
+    return window_screen
 
 def makeTurtle(turtle_colour, turtle_shape='turtle'):
     """This function creates the turtle object using the turtle shape as default shape"""
