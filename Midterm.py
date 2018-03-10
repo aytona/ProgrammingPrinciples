@@ -14,29 +14,13 @@ def makeTurtle(turtle_colour, turtle_shape='turtle'):
     new_turtle.color(turtle_colour)
     return new_turtle
 
-def makeTriangle(turt):
-    """This function creates the triangle using the turtle param as the drawer"""
-    for i in range(3):
+def makeShape(turt, side_amount):
+    """This function creates a shape that has a certain amount of sides"""
+    side_counter = side_amount
+    while side_counter > 0:
         turt.forward(100)
-        turt.left(360/3)
-
-def makeSquare(turt):
-    """This function creates the square using the turtle param as the drawer"""
-    for i in range(4):
-        turt.forward(100)
-        turt.left(360/4)
-
-def makePentagon(turt):
-    """This function creates the pentagon using the turtle param as the drawer"""
-    for i in range(5):
-        turt.forward(100)
-        turt.left(360/5)
-
-def makeOctagon(turt):
-    """This function creates the octagon using the turtle param as the drawer"""
-    for i in range(8):
-        turt.forward(100)
-        turt.left(360/8)
+        turt.left(360/side_amount)
+        side_counter -= 1
 
 def main():
     a_turtle = makeTurtle(input("Turtle colour: "))  # Creating the turtle
@@ -51,13 +35,13 @@ def main():
             shapes_drawn.remove(randNum)
         # Uses the random number generated to draw certain shapes
         if randNum == 0:
-            makeTriangle(a_turtle)
+            makeShape(a_turtle, 3)
         elif randNum == 1:
-            makeSquare(a_turtle)
+            makeShape(a_turtle, 4)
         elif randNum == 2:
-            makePentagon(a_turtle)
+            makeShape(a_turtle, 5)
         else:
-            makeOctagon(a_turtle)
+            makeShape(a_turtle, 8)
         # If all shapes has been drawn, ask the user if they still want to continue
         if len(shapes_drawn) == 0:
             print("Congratulations! All shapes has been drawn!")
