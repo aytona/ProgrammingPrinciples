@@ -12,14 +12,17 @@ def conjecture(number):
         return conjecture(number*3+1)
 
 def main():
-    try:
-        user_input = input("Enter a positive integer: ")
-        if user_input.isdigit() and int(user_input) > 0:
-            user_input = int(user_input)
-        else:
-            raise ValueError
-    except ValueError:
-        print("Must be a positive integer")
+    while True:
+        try:
+            user_input = input("Enter a positive integer: ")
+            if user_input.isdigit() and int(user_input) > 0:
+                user_input = int(user_input)
+                break
+            else:
+                raise ValueError
+        except ValueError:
+            pass
+            print("Must be a positive integer")
     number = conjecture(user_input)
 
 main()
