@@ -19,17 +19,19 @@ def random_colour():
     return (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
 def turtle_pathing(bounds, turt):
-    inbound = True
-    while inbound:
-        if (turt.xcor() > bounds[0] or turt.xcor() < -bounds[0]) or (turt.ycor() > bounds[1] or turt.ycor() < -bounds[1]):
-            inbound = False
-        random_direction = random.randrange(0, 3)
-        if random_direction == 1:
-            turt.left(90)
-        elif random_direction == 2:
+    while inbound_check(bounds, turt):
+        random_direction = random.randrange(0, 2)
+        if random_direction == 0:
+            turt.left(90)   
+        elif random_direction == 1:
             turt.right(90)
         turt.forward(random.randrange(0, 101))
     turt.hideturtle()
+
+def inbound_check(bounds, turt):
+    if turt.xcor() > bounds[0] or turt.xcor() < -bounds[0] or turt.ycor() > bounds[1] or turt.ycor() < -bounds[1]:
+        return False
+    return True
 
 def turtle_loop(bounds, number):
     while number > 0:
