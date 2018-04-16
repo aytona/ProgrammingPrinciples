@@ -44,7 +44,18 @@ class Parent(Grand_Parent):
         return self.parents
 
 class Children(Parent):
-    pass
+    def GrandParent_Percentage(self, name):
+        for i in range(2):
+            for j in range(2):
+                if super().Get_Parent()[i].Get_Parent()[j].Get_Name() == name:
+                    intersection = set(self.chromosomes) & set(super().Get_Parent()[i].Get_Parent()[j].Get_Chromosomes())
+                    return len(intersection)/len(self.chromosomes)*100
+    
+    def Parent_Percentage(self, name):
+        for i in range(2):
+            if super().Get_Parent()[i].Get_Name() == name:
+                intersection = self.chromosomes & super().Get_Parent()[i].Get_Chromosomes()
+                return len(intersection)/len(self.chromosomes)*100
 
 if __name__ == "__main__":
     GrandMother = Grand_Parent("GrandMother")
@@ -61,3 +72,5 @@ if __name__ == "__main__":
     print(Mother.Get_Name() + ": " + str(Mother.Get_Chromosomes()))
     print(Father.Get_Name() + ": " + str(Father.Get_Chromosomes()))
     print(Child.Get_Name() + ": " + str(Child.Get_Chromosomes()))
+    print("{:g} %% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandPa"),3), "GrandPa"))
+    print("{:g} %% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandMother"),3), "GrandMother"))
