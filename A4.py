@@ -10,9 +10,10 @@ class Grand_Parent(object):
         self.chromosomes = []
         while count < chrom_num:
             rand_char = random.choice(string.ascii_letters)
-            if 'x' not in rand_char.casefold() or 'z' not in rand_char.casefold():
-                self.chromosomes.append(rand_char)
-                count += 1
+            if rand_char not in self.chromosomes:
+                if 'x' not in rand_char.casefold() or 'z' not in rand_char.casefold():
+                    self.chromosomes.append(rand_char)
+                    count += 1
 
     def Get_Chromosomes(self):
         return self.chromosomes
@@ -54,7 +55,7 @@ class Children(Parent):
     def Parent_Percentage(self, name):
         for i in range(2):
             if super().Get_Parent()[i].Get_Name() == name:
-                intersection = self.chromosomes & super().Get_Parent()[i].Get_Chromosomes()
+                intersection = set(self.chromosomes) & set(super().Get_Parent()[i].Get_Chromosomes())
                 return len(intersection)/len(self.chromosomes)*100
 
 if __name__ == "__main__":
@@ -65,12 +66,12 @@ if __name__ == "__main__":
     Mother = Parent("Mother", (GrandMother, GrandFather))
     Father = Parent("Father", (GrandPa, GrandMa))
     Child = Children("Child", (Mother, Father))
-    print(GrandMother.Get_Name() + ": " + str(GrandMother.Get_Chromosomes()))
-    print(GrandFather.Get_Name() + ": " + str(GrandFather.Get_Chromosomes()))
-    print(GrandMa.Get_Name() + ": " + str(GrandMa.Get_Chromosomes()))
-    print(GrandPa.Get_Name() + ": " + str(GrandPa.Get_Chromosomes()))
-    print(Mother.Get_Name() + ": " + str(Mother.Get_Chromosomes()))
-    print(Father.Get_Name() + ": " + str(Father.Get_Chromosomes()))
-    print(Child.Get_Name() + ": " + str(Child.Get_Chromosomes()))
-    print("{:g} %% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandPa"),3), "GrandPa"))
-    print("{:g} %% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandMother"),3), "GrandMother"))
+    print("{}: {}".format(GrandMother.Get_Name(), GrandMother.Get_Chromosomes()))
+    print("{}: {}".format(GrandFather.Get_Name(), GrandFather.Get_Chromosomes()))
+    print("{}: {}".format(GrandMa.Get_Name(), GrandMa.Get_Chromosomes()))
+    print("{}: {}".format(GrandPa.Get_Name(), GrandPa.Get_Chromosomes()))
+    print("{}: {}".format(Mother.Get_Name(), Mother.Get_Chromosomes()))
+    print("{}: {}".format(Father.Get_Name(), Father.Get_Chromosomes()))
+    print("{}: {}".format(Child.Get_Name(), Child.Get_Chromosomes()))
+    print("{:g}% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandPa"),3), "GrandPa"))
+    print("{:g}% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandMother"),3), "GrandMother"))
