@@ -10,7 +10,7 @@ class Grand_Parent(object):
         self.chromosomes = []
         while count < chrom_num:
             rand_char = random.choice(string.ascii_letters)
-            if 'x' not in rand_char.casefold() or 'z' not in rand_char.casefold():
+            if 'x' not in rand_char.casefold() and 'z' not in rand_char.casefold():
                 self.chromosomes.append(rand_char)
                 count += 1
 
