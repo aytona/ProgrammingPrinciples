@@ -37,8 +37,8 @@ class Parent(Grand_Parent):
         self.name = name
         self.chromosomes = self.Inherit_Chromosomes()
         
-    def Inherit_Chromosomes(self):
-        return self.parents[0].Pass_Chromosomes(6) + self.parents[1].Pass_Chromosomes(6)
+    def Inherit_Chromosomes(self, chromo_amount=6):
+        return self.parents[0].Pass_Chromosomes(chromo_amount) + self.parents[1].Pass_Chromosomes(chromo_amount)
 
     def Get_Parent(self):
         return self.parents
@@ -48,14 +48,20 @@ class Children(Parent):
         for i in range(2):
             for j in range(2):
                 if super().Get_Parent()[i].Get_Parent()[j].Get_Name() == name:
-                    intersection = set(self.chromosomes) & set(super().Get_Parent()[i].Get_Parent()[j].Get_Chromosomes())
-                    return len(intersection)/len(self.chromosomes)*100
+                    tempSuperChromo = list(super().Get_Parent()[i].Get_Parent()[j].Get_Chromosomes())
+                    for x in range(len(self.chromosomes)):
+                        if self.chromosomes[x] in tempSuperChromo:
+                           tempSuperChromo.remove(self.chromosomes[x]) 
+                    return (len(self.chromosomes) - len(tempSuperChromo))/len(self.chromosomes)*100
     
     def Parent_Percentage(self, name):
         for i in range(2):
             if super().Get_Parent()[i].Get_Name() == name:
-                intersection = set(self.chromosomes) & set(super().Get_Parent()[i].Get_Chromosomes())
-                return len(intersection)/len(self.chromosomes)*100
+                tempSuperChromo = list(super().Get_Parent()[i].Get_Chromosomes())
+                for x in range(len(self.chromosomes)):
+                    if self.chromosomes[x] in tempSuperChromo:
+                        tempSuperChromo.remove(self.chromosomes[x])
+                return (len(self.chromosomes) - len(tempSuperChromo))/len(self.chromosomes)*100
 
 if __name__ == "__main__":
     GrandMother = Grand_Parent("GrandMother")
