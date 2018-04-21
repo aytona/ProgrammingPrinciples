@@ -3,16 +3,20 @@
 import string, random
 
 class Grand_Parent(object):
-    def __init__(self, name, chrom_num=12):
+    def __init__(self, name, upper, chrom_num=12):
         self.name = name
         self.chrom_num = chrom_num
         count = 0
         self.chromosomes = []
         while count < chrom_num:
-            rand_char = random.choice(string.ascii_letters)
+            if upper:
+                rand_char = random.choice(string.ascii_uppercase)
+            else:
+                rand_char = random.choice(string.ascii_lowercase)
             if 'x' not in rand_char.casefold() and 'z' not in rand_char.casefold():
-                self.chromosomes.append(rand_char)
-                count += 1
+                if rand_char not in self.chromosomes:
+                    self.chromosomes.append(rand_char)
+                    count += 1
 
     def Get_Chromosomes(self):
         return self.chromosomes
@@ -44,30 +48,16 @@ class Parent(Grand_Parent):
         return self.parents
 
 class Children(Parent):
-    def GrandParent_Percentage(self, name):
-        for i in range(2):
-            for j in range(2):
-                if super().Get_Parent()[i].Get_Parent()[j].Get_Name() == name:
-                    tempSuperChromo = list(super().Get_Parent()[i].Get_Parent()[j].Get_Chromosomes())
-                    for x in range(len(self.chromosomes)):
-                        if self.chromosomes[x] in tempSuperChromo:
-                           tempSuperChromo.remove(self.chromosomes[x]) 
-                    return (len(self.chromosomes) - len(tempSuperChromo))/len(self.chromosomes)*100
-    
-    def Parent_Percentage(self, name):
-        for i in range(2):
-            if super().Get_Parent()[i].Get_Name() == name:
-                tempSuperChromo = list(super().Get_Parent()[i].Get_Chromosomes())
-                for x in range(len(self.chromosomes)):
-                    if self.chromosomes[x] in tempSuperChromo:
-                        tempSuperChromo.remove(self.chromosomes[x])
-                return (len(self.chromosomes) - len(tempSuperChromo))/len(self.chromosomes)*100
+    def Percentage(self, alien):
+        complement_self = list(set(self.chromosomes) - set(alien.Get_Chromosomes()))
+        clone_self = list(self.chromosomes)
+        return len([chromosome for chromosome in clone_self if chromosome not in complement_self])/len(self.chromosomes)
 
 if __name__ == "__main__":
-    GrandMother = Grand_Parent("GrandMother")
-    GrandFather = Grand_Parent("GrandFather")
-    GrandMa = Grand_Parent("GrandMa")
-    GrandPa = Grand_Parent("GrandPa")
+    GrandMother = Grand_Parent("GrandMother", False)
+    GrandFather = Grand_Parent("GrandFather", False)
+    GrandMa = Grand_Parent("GrandMa", True)
+    GrandPa = Grand_Parent("GrandPa", True)
     Mother = Parent("Mother", (GrandMother, GrandFather))
     Father = Parent("Father", (GrandPa, GrandMa))
     Child = Children("Child", (Mother, Father))
@@ -78,5 +68,5 @@ if __name__ == "__main__":
     print("{}: {}".format(Mother.Get_Name(), Mother.Get_Chromosomes()))
     print("{}: {}".format(Father.Get_Name(), Father.Get_Chromosomes()))
     print("{}: {}".format(Child.Get_Name(), Child.Get_Chromosomes()))
-    print("{:g}% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandPa"),3), "GrandPa"))
-    print("{:g}% of chromosomes came from {}".format(round(Child.GrandParent_Percentage("GrandMother"),3), "GrandMother"))
+    print("{:.2%} of chromosomes came from {}".format(Child.Percentage(GrandPa), "GrandPa"))
+    print("{:.2%} of chromosomes came from {}".format(Child.Percentage(GrandMother), "GrandMother"))
