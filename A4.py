@@ -50,8 +50,7 @@ class Parent(Grand_Parent):
 class Children(Parent):
     def Percentage(self, alien):
         complement_self = list(set(self.chromosomes) - set(alien.Get_Chromosomes()))
-        clone_self = list(self.chromosomes)
-        return len([chromosome for chromosome in clone_self if chromosome not in complement_self])/len(self.chromosomes)
+        return len([chromosome for chromosome in self.chromosomes if chromosome not in complement_self])/len(self.chromosomes)
 
 if __name__ == "__main__":
     GrandMother = Grand_Parent("GrandMother", False)
