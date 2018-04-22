@@ -3,20 +3,16 @@
 import string, random
 
 class Grand_Parent(object):
-    def __init__(self, name, upper, chrom_num=12):
+    def __init__(self, name, gene_pool, chrom_num=12):
         self.name = name
         self.chrom_num = chrom_num
         count = 0
         self.chromosomes = []
         while count < chrom_num:
-            if upper:
-                rand_char = random.choice(string.ascii_uppercase)
-            else:
-                rand_char = random.choice(string.ascii_lowercase)
-            if 'x' not in rand_char.casefold() and 'z' not in rand_char.casefold():
-                if rand_char not in self.chromosomes:
-                    self.chromosomes.append(rand_char)
-                    count += 1
+            rand_index = random.randrange(len(gene_pool))
+            self.chromosomes.append(gene_pool[rand_index])
+            del gene_pool[rand_index]
+            count += 1
 
     def Get_Chromosomes(self):
         return self.chromosomes
@@ -49,19 +45,16 @@ class Parent(Grand_Parent):
 
 class Children(Parent):
     def Percentage(self, alien):
-        clone_alien = list(alien.Get_Chromosomes())
-        union_list = []
-        for i in range(len(self.chromosomes)):
-            if self.chromosomes[i] in clone_alien:
-                union_list.append(self.chromosomes[i])
-                clone_alien.remove(self.chromosomes[i])
-        return len(union_list)/len(self.chromosomes)
+        union = list(set(self.chromosomes) & set(alien.Get_Chromosomes()))
+        return float(len(union))/float(len(self.chromosomes))
 
 if __name__ == "__main__":
-    GrandMother = Grand_Parent("GrandMother", False)
-    GrandFather = Grand_Parent("GrandFather", False)
-    GrandMa = Grand_Parent("GrandMa", True)
-    GrandPa = Grand_Parent("GrandPa", True)
+    gene_pool_a = [letters for letters in string.ascii_lowercase if letters != 'x' and letters != 'z']
+    gene_pool_b = [letters for letters in string.ascii_uppercase if letters != 'X' and letters != 'Z']
+    GrandMother = Grand_Parent("GrandMother", gene_pool_a)
+    GrandFather = Grand_Parent("GrandFather", gene_pool_a)
+    GrandMa = Grand_Parent("GrandMa", gene_pool_b)
+    GrandPa = Grand_Parent("GrandPa", gene_pool_b)
     Mother = Parent("Mother", (GrandMother, GrandFather))
     Father = Parent("Father", (GrandPa, GrandMa))
     Child = Children("Child", (Mother, Father))
