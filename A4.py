@@ -52,8 +52,8 @@ class Parent(Grand_Parent):
 
 class Children(Parent):
     def Percentage(self, alien):
-        union = list(set(self.chromosomes) & set(alien.Get_Chromosomes()))
-        return float(len(union))/float(len(self.chromosomes))
+        intersection = list(set(self.chromosomes) & set(alien.Get_Chromosomes()))
+        return float(len(intersection))/float(len(self.chromosomes))
 
 if __name__ == "__main__":
     GrandMother = Grand_Parent("GrandMother", "Female")
